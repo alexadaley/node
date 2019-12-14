@@ -1,7 +1,7 @@
 const request = require('supertest')
 const expect = require('chai').expect
 const app = require('../app')
-const Product = require('../models/product')
+const Password = require('../models/password')
 const User = require('../models/user')
 
 let user = {
@@ -10,18 +10,18 @@ let user = {
   password: 'pass',
   email: 'a@b.c'
 }
-let product1 = {
+let password1 = {
   _id: '5ddcfa78e38c7107015f35b6',
-  name: "Printer",
+  name: "cat",
   user: user
 }
-let product2 = {
+let password2= {
   _id: '4ddcfa78e38c7107015f35b6',
-  name: "Screen",
+  name: "dog",
   user: user
 }
 
-describe('Products', () => {
+describe('Password', () => {
   beforeEach(async function() {
     let u = new User(user)
     await u.save()
@@ -30,42 +30,42 @@ describe('Products', () => {
     await User.deleteOne({_id: user._id})
 	});
 
-  describe('Getting products', () => {
+  describe('Getting passwords', () => {
     beforeEach(async function() {
-      let p1 = new Product(product1)
-      let p2 = new Product(product2)
+      let p1 = new Password(password1)
+      let p2 = new Password(password1)
       await p1.save()
       await p2.save()
     });
     afterEach(async function() {
-      await Product.deleteOne({_id: product1._id})
-      await Product.deleteOne({_id: product2._id})
+      await Password.deleteOne({_id: password1._id})
+      await Password.deleteOne({_id: password2._id})
     });
 
-    it('should return all products', async () => {
+    it('should return all passwords', async () => {
         const res = await request(app)
-            .get(`/api/${user._id}/products`)
+            .get(`/api/${user._id}/password`)
         expect(res.statusCode).equals(200)
         expect(res.body).to.have.nested.property('data[0].name', 'Printer')
         expect(res.body).to.have.nested.property('data[1].name', 'Screen')
     })
   })
 
-  describe('Creating products', () => {
+  describe('Creating passwords', () => {
     afterEach(async function() {
-      await Product.deleteOne({_id: product1._id})
+      await Password.deleteOne({_id: password1._id})
     });
 
       it('should create correctly and return id and message', async () => {
           var res = await request(app)
-            .post(`/api/${user._id}/products`)
-            .send(product1)
+            .post(`/api/${user._id}/passwords`)
+            .send(password1)
           expect(res.statusCode).equals(201)
           expect(res.body).to.have.property('data').to.have.property('message','Created ok')
           expect(res.body).to.have.property('data').to.have.property('id')
           const id = res.body.data.id
           res = await request(app)
-            .get(`/api/${user._id}/products/${id}`)
+            .get(`/api/${user._id}/password/${id}`)
           console.log(JSON.stringify(res.body))
           expect(res.statusCode).equals(200)
           expect(res.body).to.have.nested.property('data.name', 'Printer')

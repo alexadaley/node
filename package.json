@@ -1,5 +1,5 @@
 {
-  "name": "node",
+  "name": "node-instance",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -11,7 +11,7 @@
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "~4.16.1",
-    "mongodb": "^3.3.4",
+    "mongodb": "^3.3.5",
     "mongoose": "^5.7.12",
     "morgan": "~1.9.1"
   },
@@ -19,8 +19,5 @@
     "chai": "^4.2.0",
     "mocha": "^6.2.2",
     "supertest": "^4.0.2"
-  },
-   "engines": {
-    "node": "12.x"
   }
 }
